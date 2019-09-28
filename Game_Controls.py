@@ -1,4 +1,4 @@
-import pygame
+import pygame, Ball, Paddles
 
 
 class Game:
@@ -21,23 +21,21 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
                         self.val_y[0] = -5
-                    if event.type == pygame.K_UP:
+                    if event.key == pygame.K_DOWN:
                         self.val_y[0] = 5
-                    if event.type == pygame.K_w:
+                    if event.key == pygame.K_w:
                         self.val_y[1] = -5
-                    if event.type == pygame.K_s:
+                    if event.key == pygame.K_s:
                         self.val_y[1] = 5
 
                 if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_w or event.key == pygame.K_s:
-                        self.val_y[0] = 0
-                        self.val_y[1] = 0
+                    self.val_y[0] = 0; self.val_y[1] = 0
             self.right[1] += self.val_y[0]
             self.left[1] += self.val_y[1]
             screen.fill((0, 0, 0))
-            Paddles(self.left)
-            Paddles(self.right)
-            Ball()
+            Paddles.Paddles(screen, self.left)
+            Paddles.Paddles(screen, self.right)
+            Ball.Ball(screen)
             self.clock.tick(30)
             pygame.display.update()
             pygame.display.update()
@@ -45,26 +43,8 @@ class Game:
         quit()
 
 
-class Paddles:
-    def __init__(self, pos):
-        pygame.draw.rect(screen, (255, 255, 255), (pos[0], pos[1], 10, 100))
-
-    def paddle_boundaries(self):
-        pass
 
 
-class Ball:
-    def __init__(self):
-        pygame.draw.circle(screen, (255, 255, 255), (50, 50), 10)
-
-    def ballangles(self):
-        pass
 
 
-class WallBoundaries:
-    def __init__(self):
-        pass
-
-
-game = Game()
-game.event_process()
+Game().event_process()
