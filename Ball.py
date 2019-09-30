@@ -3,8 +3,9 @@ import pygame
 
 
 class Ball:
-    def __init__(self, screen):
-        pygame.draw.circle(screen, (255, 255, 255), (50, 50), 10)
+    def __init__(self, screen, ball_pos ):
+        pygame.draw.circle(screen, (255, 255, 255), (ball_pos), 10)
+        print(ball_pos)
 
     def ballangles(self):
         pass
