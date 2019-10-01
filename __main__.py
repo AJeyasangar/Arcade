@@ -1,19 +1,22 @@
 #This links all the programs together so the program can work
 import Game_Controls
+import pygame
 import Ball
 import Paddles
-import Boundaries
 
 
 class Game:
     def __init__(self):
-        self.Controls = Game_Controls()
-        self.Ball = Ball()
-        self.Paddles = Paddles()
-        self.Boundaries = Boundaries()
+        pygame.init()
+        global screen
+        screen = pygame.display.set_mode((1200, 600))
+        crashed = False
 
-    def Run(self):
-        pass
+        while not crashed:
+            Paddle_Pos = Game_Controls.Game(screen).event_process()
+
+
+Game()
 
 
 
