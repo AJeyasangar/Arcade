@@ -39,8 +39,5 @@ class Game:
             self.screen.fill((0, 0, 0))
             Paddles.Paddles(self.screen, self.right)
             Paddles.Paddles(self.screen, self.left)
-            #Ball.Ball(self.screen, self.bal_pos)
+            Ball.Ball(self.screen, self.bal_pos).draw()
             pygame.display.update()
-
-
-
