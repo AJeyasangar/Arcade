@@ -6,11 +6,18 @@ import pygame
 class Game:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((1200, 600))
+        width = 640
+        height = 480
+        self.screen = pygame.display.set_mode((width, height))
         crashed = False
 
-        while not crashed:
-            Paddle_Pos = Game_Controls.Game(self.screen).event_process()
+        self.speed_x = 3
+        self.speed_y = 3
+        self.score_left = 0
+        self.score_right = 0
+
+
+        Paddle_Pos = Game_Controls.Game(self.screen).event_process()
 
 
 Game()
