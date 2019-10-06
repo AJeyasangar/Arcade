@@ -6,8 +6,8 @@ import pygame
 class Game:
     def __init__(self):
         pygame.init()
-        width = 640
-        height = 480
+        width = 1200
+        height = 600
         self.screen = pygame.display.set_mode((width, height))
         crashed = False
 
