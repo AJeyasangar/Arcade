@@ -1,10 +1,9 @@
 import pygame
 import Paddles
-import BounceBall
-import time
+import Platform_Scores
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, width, height):
         self.screen = screen
         self.crashed = False
         self.clock = pygame.time.Clock()
@@ -17,10 +16,10 @@ class Game:
         self.ball_y_pos = int(0.5 * 480)
         self.score_left = 0
         self.score_right = 0
-        self.ball_x_speed = 3
-        self.ball_y_speed = 3
-        self.width = 1200
-        self.height = 600
+        self.ball_x_speed = 5
+        self.ball_y_speed = 5
+        self.width = width
+        self.height = height
 
     def event_process(self):
         while not self.crashed:
@@ -42,6 +41,9 @@ class Game:
             self.right[1] += self.val_y[0]
             self.left[1] += self.val_y[1]
             self.screen.fill((0, 0, 0))
+            Platform_Scores.Screen(self.screen, self.width, self.score_left, self.score_right).score_board()
+
+
 
             self.ball_x_pos = self.ball_x_pos + self.ball_x_speed
             if self.ball_x_pos > self.width:
@@ -65,9 +67,14 @@ class Game:
                 self.ball_y_speed = -self.ball_y_speed
             elif self.ball_y_pos < 0:
                 self.ball_y_speed = abs(self.ball_y_speed)
-            pygame.draw.circle(self.screen, (255, 255, 255), [self.ball_x_pos, self.ball_y_pos], 10)
+            pygame.draw.circle(self.screen, (255, 255, 255), [self.ball_x_pos, self.ball_y_pos], 4)
+
+
+
+
             result = Paddles.Paddles(self.screen, self.right, self.left).hit(self.ball_x_pos, self.ball_y_pos, self.ball_x_speed)
             self.ball_x_pos = result[0]
             self.ball_x_speed = result[1]
+            print(self.clock.tick(30))
             pygame.display.update()
 
