@@ -6,11 +6,14 @@ import pygame
 class Game:
     def __init__(self):
         pygame.init()
-        width = 1200
-        height = 600
-        self.screen = pygame.display.set_mode((width, height))
-        Game_Controls.Game(self.screen, width, height).event_process()
+        self.width = 1200
+        self.height = 600
+        self.screen = pygame.display.set_mode((self.width, self.height))
+
+    def __call__(self):
+        Game_Controls.Game(self.screen, self.width, self.height).event_process
 
 
 if __name__ == '__main__':
-    Game()
+    game = Game()
+    game()
