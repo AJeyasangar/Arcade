@@ -1,6 +1,7 @@
 import pygame
 import Paddles
 import Platform_Scores
+import Pause_Menu
 
 
 class Game:
@@ -23,7 +24,7 @@ class Game:
         self.height = height
         self.mode_type = ['game', 'menu', 'pause', 'ai_mode']
         self.mode = self.mode_type[0]
-
+        self.predict_y = 0
     @property
     def event_process(self):
         while not self.crashed:
@@ -40,21 +41,24 @@ class Game:
                     if event.key == pygame.K_s:
                         self.val_y[1] = self.speed
                     if event.key == pygame.K_ESCAPE:
-                        self.mode = self.mode_type[2]
+                        Pause_Menu.Pause()
+
                 if event.type == pygame.KEYUP:
                     self.val_y[0] = 0
                     self.val_y[1] = 0
             #self.right[1] += self.val_y[0]
             self.left[1] += self.val_y[1]
-            #if int(self.left[1]) <= -10 or int(self.right[1]) <= -10 or int(self.left[1] + 100) >= 610 or int(self.right[1] +
-            #                                                                                            100) >= 610:
-            if int(self.left[1]) <= -10 or  int(self.left[1] + 100) >= 610:
+            #if int(self.left[1]) <= -10 or int(self.right[1]) <= -10 or int(self.left[1] + 100) >= 610 or int(
+            # self.right[1] + 100) >= 610:
+            if int(self.left[1]) <= -10 or int(self.left[1] + 100) >= 610:
                 self.right[1] -= self.val_y[0]
                 self.left[1] -= self.val_y[1]
 
-            if int(self.right[1]) <= -10 or int(self.right[1] + 100) >= 610:
-                self.right[1] = 100
+            """if int(self.right[1]) <= 10 or int(self.right[1] + 100) >= 590:
+                self.right[1] = 100"""
             self.screen.fill((0, 0, 0))
+
+            self.right[1] = self.ball_y_pos - 50
             Platform_Scores.Screen(self.screen, self.width, self.score_left, self.score_right).score_board()
             result = Paddles.Paddles(self.screen, self.right, self.left).hit(self.ball_x_pos, self.ball_y_pos,
                                                                              self.ball_x_speed)
@@ -78,15 +82,21 @@ class Game:
                 self.ball_y_pos = int(0.5 * self.height)
                 self.score_right += 1
             self.ball_y_pos = self.ball_y_pos + self.ball_y_speed
-            if self.ball_y_pos > self.height:
+            if self.ball_y_pos > self.height - 3.5:
                 self.ball_y_speed = -self.ball_y_speed
                 if self.ball_x_speed > 0:
-                    self.right[1] = Paddles.Paddles(self.screen, self.right, self.left).ai_paddle(self.ball_x_pos, self.ball_y_pos, self.ball_x_speed, self.ball_y_speed)
-            elif self.ball_y_pos < 0:
+                    self.right[1] = Paddles.Paddles(self.screen, self.right, self.left).ai_paddle(self.ball_x_pos,
+                                                                                                  self.ball_y_pos,
+                                                                                                  self.ball_x_speed,
+                                                                                                  self.ball_y_speed)
+            elif self.ball_y_pos < 3.5:
                 self.ball_y_speed = abs(self.ball_y_speed)
-                if self.ball_x_speed >0:
-                    self.right[1] = Paddles.Paddles(self.screen, self.right, self.left).ai_paddle(self.ball_x_pos, self.ball_y_pos, self.ball_x_speed, self.ball_y_speed)
+                if self.ball_x_speed > 0:
+                    self.right[1] = Paddles.Paddles(self.screen, self.right, self.left).ai_paddle(self.ball_x_pos,
+                                                                                                  self.ball_y_pos,
+                                                                                                  self.ball_x_speed,
+                                                                                                  self.ball_y_speed)
             pygame.draw.circle(self.screen, (255, 255, 255), [self.ball_x_pos, self.ball_y_pos], 7)
-            print(self.right[1])
-            #print(self.clock.tick(30))
-            pygame.display.update()
+
+            print(self.clock.tick(30))
+            pygame.display.flip()

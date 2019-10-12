@@ -25,6 +25,8 @@ class Paddles:
             loop = x_difference // speed_x
             paddle_y_pos = ball_y_pos + (loop*speed_y)
             paddle_y_pos -= 50
+            #y_difference = abs(paddle_y_pos - self.right[1])
+
         return paddle_y_pos
 
 
