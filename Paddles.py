@@ -1,32 +1,43 @@
-import pygame, random
+import pygame
+import pygame.math as Mathematics
+import maths
 
 
 class Paddles:
-    def __init__(self, screen, right, left):
+    def __init__(self, screen, right, left, ball_pos, ball_speed, speed_direction, speed_val, speed_increase, last_ball_pos):
         self.right = right
         self.left = left
+        self.ball_pos = ball_pos
+        self.ball_speed = ball_speed
+        self.speed_direction = speed_direction
+        self.speed_increase = speed_increase
         pygame.draw.rect(screen, (255, 255, 255), (right[0], right[1], 10, 100))
         pygame.draw.rect(screen, (255, 255, 255), (left[0], left[1], 10, 100))
+        self.angle = maths.Angle(self.ball_pos, self.ball_speed, self.speed_direction).calculate
+        self.speed_val = speed_val
 
-    def hit(self, pos_x, pos_y, speed_x):
-        if pos_x <= 12 and int(self.left[1]) <= pos_y <= (int(self.left[1] + 100)):
-            speed_x = random.randint(10, 15)
-            pos_x = 12
-            speed_x = abs(speed_x)
-        elif pos_x >= 1188 and int(self.right[1]) <= pos_y <= (int(self.right[1] + 100)):
-            speed_x = random.randint(10, 15)
-            pos_x = 1188
-            speed_x = -abs(speed_x)
-        return pos_x, speed_x
-
-    def ai_paddle(self, ball_x_pos, ball_y_pos, speed_x, speed_y):
-        if speed_x > 0:
-            x_difference = 1188 - ball_x_pos
-            loop = x_difference // speed_x
-            paddle_y_pos = ball_y_pos + (loop*speed_y)
-            paddle_y_pos -= 50
-            #y_difference = abs(paddle_y_pos - self.right[1])
-
-        return paddle_y_pos
-
+    def hit(self):
+        if self.ball_pos[0] <= 12 and int(self.left[1]) <= self.ball_pos[1] <= (int(self.left[1] + 100)):
+            self.ball_pos[0] = 12
+            if self.ball_pos[1] == self.left[1]:
+                self.ball_speed = Mathematics.Vector2(self.speed_val).rotate(- self.angle)
+            elif self.ball_pos[1] >= self.left[1]:
+                self.ball_speed = Mathematics.Vector2(self.speed_val).rotate(-(self.angle * 2) - 15)
+            else:
+                self.ball_speed = Mathematics.Vector2(self.speed_val).rotate((self.angle * 2) + 15)
+            if self.speed_val < 10:
+                self.speed_val += self.speed_increase
+            self.speed_direction = True
+        elif self.ball_pos[0] >= 1188 and int(self.right[1]) <= self.ball_pos[1] <= (int(self.right[1] + 100)):
+            self.ball_pos[0] = 1188
+            if self.ball_pos[1] == self.left[1]:
+                self.ball_speed = Mathematics.Vector2(self.speed_val).rotate(-self.angle)
+            elif self.ball_pos[1] >= self.left[1]:
+                self.ball_speed = Mathematics.Vector2(self.speed_val).rotate((self.angle * 2) + 15)
+            else:
+                self.ball_speed = Mathematics.Vector2(self.speed_val).rotate(-(self.angle * 2) - 15)
+            self.speed_direction = False
+            if self.speed_val < 10:
+                self.speed_val += self.speed_increase
+        return self.ball_pos, self.ball_speed, self.speed_direction, self.speed_val
 

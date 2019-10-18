@@ -9,9 +9,6 @@ class Screen:
         self.font = pygame.font.Font(None,  34)
         self.screen = screen
 
-    def arena(self):
-        pass
-
     def score_board(self):
         scores = self.font.render("%2s:%2s" % (str(self.score_left), str(self.score_right)), 1, (255, 255, 255))
         text_pos = scores.get_rect(centerx=self.width / 2)

@@ -1,38 +1,56 @@
 import pygame
-import Game_Controls
-import Buttons
-
+import time
 
 class Menu:
     def __init__(self, screen, width, height):
         self.screen = screen
         self.width = width
         self.height = height
-        self.font = pygame.font.Font(None, 34)
+        self.font = "Airstream.ttf"
 
-    def draw(self):
-        print("here")
-        text = "Welcome to Pong"
-        Menu_text = self.font.render(text, True, (255, 255, 255))
-        text_pos = Menu_text.get_rect(centerx=self.width / 2)
-        self.screen.blit(Menu_text, text_pos)
-        self.button_01 = Buttons.Button("Game", self.screen, (85, 190))
-        self.buttons = [self.button_01]
+    def draw(self, Start_Menu, Start_Game, selected, Start_Modes):
+        title = "The Arcade"
+        text_Pong= "Pong"
+        text_Snake = "Snake"
+        text_quit = "Quit"
+        print(Start_Menu)
+        self.screen.fill((0, 0, 255))
+        title = text_format(title, self.font, 90, (255, 255, 255))
 
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = pygame.mouse.get_pos()
-                    for button in self.buttons:
-                        if button.rect.collidepoint(pos):
-                            Buttons.button.call_back()
+        if Start_Menu == Start_Modes[0]:
+            text_Pong= text_format(text_Pong, self.font, 75, (255, 255, 255))
+            if selected:
+                Start_Game = "pong"
+        else:
+            text_Pong = text_format(text_Pong, self.font, 75, (0, 0, 0))
+        if Start_Menu == Start_Modes[1]:
+            text_Snake = text_format(text_Snake, self.font, 75, (255, 255, 255))
+            if selected:
+                Start_Game = "snake"
+        else:
+            text_Snake = text_format(text_Snake, self.font, 75, (0, 0, 0))
 
-            for button in self.buttons:
-                Buttons.Button("Game", self.screen, (85, 190)).draw
+        if Start_Menu == Start_Modes[2]:
+            text_quit = text_format(text_quit, self.font, 75, (255, 255, 255))
+            if selected:
+                pygame.quit()
+        else:
+            text_quit = text_format(text_quit, self.font, 75, (0, 0, 0))
 
-            pygame.display.flip()
-            pygame.time.wait(40)
+        title_rect = title.get_rect()
+        Pong_rect = text_Pong.get_rect()
+        Snake_rect = text_Snake.get_rect()
+        quit_rect = text_quit.get_rect()
 
+        self.screen.blit(title, (self.width/2 - (title_rect[2]/2), 80))
+        self.screen.blit(text_Pong, (self.width/2 - (Pong_rect[2]/2), 300))
+        self.screen.blit(text_Snake, (self.width / 2 - (Snake_rect[2] / 2), 360))
+        self.screen.blit(text_quit, (self.width/2 - (quit_rect[2]/2), 420))
+        return Start_Game
+
+
+def text_format(message, textFont, textSize, textColor):
+    newFont = pygame.font.Font(textFont, textSize)
+    newText = newFont.render(message, 0, textColor)
+    return newText
 
