@@ -2,12 +2,12 @@ import pygame
 
 
 class Screen:
-    def __init__(self, screen, width, score_left, score_right):
-        self.width = width
-        self.score_left = score_left
-        self.score_right = score_right
+    def __init__(self, info):
+        self.width = info.width
+        self.score_left = info.score_left
+        self.score_right = info.score_right
         self.font = pygame.font.Font(None,  34)
-        self.screen = screen
+        self.screen = info.screen
 
     def score_board(self):
         scores = self.font.render("%2s:%2s" % (str(self.score_left), str(self.score_right)), 1, (255, 255, 255))

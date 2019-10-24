@@ -2,24 +2,27 @@ import pygame
 import Pause_Menu
 import pygame.math as Mathematics
 import Menu
-import Paddle_Process
 import Wall_Bounce
 import Platform_Scores
 import Paddles
 import time
+import random
+import Snake_Process
 
 
 class Game:
-    def __init__(self, screen, width, height):
-        self.screen = screen
+    def __init__(self, info):
+        pygame.init()
+        self.clock = pygame.time.Clock()
+        self.screen = info.screen
         self.val_y = Mathematics.Vector2(0, 0)
         self.val_y2 = Mathematics.Vector2(0, 0)
-        self.width = width
-        self.height = height
+        self.width = info.width
+        self.height = info.height
         self.crashed = False
         self.vector_y = -7
         self.left = Mathematics.Vector2(0, 100)
-        self.right = Mathematics.Vector2(1190, 100)
+        self.right = Mathematics.Vector2(self.width - 10, 100)
         self.ball_pos = Mathematics.Vector2(320, 240)
         self.score_left = 0
         self.score_right = 0
@@ -35,17 +38,22 @@ class Game:
         self.selected = False
         self.i = 0
 
+        self.snake_pos = [100, 50]
+        self.snake_body = [[100, 50], [100 - 10, 50], [100 - (2 * 10), 50]]
+        self.snake_score = 0
+        self.food_pos = [random.randrange(1, (self.width // 10)) * 10, random.randrange(1, (self.height // 10)) * 10]
+        self.food_spawn = True
+        self.snake_vel = [0, 0]
     @property
     def event_process(self):
         while not self.crashed:
             for event in pygame.event.get():
                 if self.Start_Game == 'menu':
-                    print("e")
                     if event.type == pygame.QUIT:
                         pygame.quit()
                         quit()
                     if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_UP and self.i>0:
+                        if event.key == pygame.K_UP and self.i > 0:
                             self.i -= 1
                             self.Start_Menu = self.Start_Modes[self.i]
                         elif event.key == pygame.K_DOWN and self.i<2:
@@ -57,9 +65,9 @@ class Game:
                             if self.Start_Menu == "quit":
                                 pygame.quit()
                                 quit()
-                    self.Start_Game = Menu.Menu(self.screen, self.width, self.height).draw(self.Start_Menu, self.Start_Game, self.selected, self.Start_Modes)
+                    self.Start_Game = Menu.Menu(self).draw(self)
 
-                elif self.Start_Game == "pong":
+                if self.Start_Game == "pong":
                     if event.type == pygame.QUIT:
                         return True
                     if event.type == pygame.KEYDOWN:
@@ -76,35 +84,33 @@ class Game:
                     if event.type == pygame.KEYUP:
                         self.val_y = Mathematics.Vector2(0, 0)
                         self.val_y2 = Mathematics.Vector2(0, 0)
-                elif self.Start_Game == "snake":
+                if self.Start_Game == "snake":
                     if event.type == pygame.QUIT:
                         return True
                     if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_UP or pygame.K_w:
-                            pass
-                        elif event.key == pygame.K_DOWN or pygame.K_s:
-                            pass
-                        elif event.key == pygame.K_LEFT or pygame.K_a:
-                            pass
-                        elif event.key == pygame.K_RIGHT or pygame.K_d:
-                            pass
+                        if event.key == pygame.K_UP or event.key == pygame.K_w:
+                            self.snake_vel[0] = 0
+                            self.snake_vel[1] = -10
+                        elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                            self.snake_vel[0] = 0
+                            self.snake_vel[1] = 10
+                        elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                            self.snake_vel[1] = 0
+                            self.snake_vel[0] = -10
+                        elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                            self.snake_vel[1] = 0
+                            self.snake_vel[0] = 10
 
             if self.Start_Game == "pong":
                 self.right += self.val_y
                 self.left += self.val_y2
                 self.screen.fill((0, 0, 0))
-                Platform_Scores.Screen(self.screen, self.width, self.score_left, self.score_right).score_board()
-                result = Paddles.Paddles(self.screen, self.right, self.left, self.ball_pos, self.ball_speed,
-                                         self.speed_direction, self.speed_val, self.speed_increase, self.last_ball_pos).hit()
+                Platform_Scores.Screen(self).score_board()
+                result = Paddles.Paddles(self).hit()
 
-                self.ball_pos = result[0]
-                self.ball_speed = result[1]
-                self.speed_direction = result[2]
-                self.speed_val = result[3]
+                self.ball_pos, self.ball_speed, self.speed_direction, self.speed_val = result
                 self.ball_pos = self.ball_pos + self.ball_speed
-                result = Wall_Bounce.BounceBoundaries(self.ball_pos, self.ball_speed, self.width, self.height,
-                                                      self.speed_val, self.last_ball_pos).check(self.score_left, self.score_right,
-                                                                                      self.speed_direction)
+                result = Wall_Bounce.BounceBoundaries(self).check(self)
                 self.ball_pos = result[0]
 
                 self.ball_speed = result[1]
@@ -122,20 +128,29 @@ class Game:
                 textpos = right_text.get_rect(centerx=self.screen.get_width() / 2)
                 textpos = left_text.get_rect(centerx=self.screen.get_width() / 2)
                 textpos.top = 60
-                if self.score_right == 2:
+                if self.score_right == 11:
                     self.screen.blit(right_text, textpos)
-                    time.sleep(3)
+                    pygame.display.update()
                     pygame.display.flip()
+                    time.sleep(8)
                     pygame.quit()
-                elif self.score_left == 2:
+
+                elif self.score_left == 11:
                     self.screen.blit(left_text, textpos)
+                    pygame.display.update()
                     pygame.display.flip()
-                    time.sleep(3)
+                    time.sleep(8)
                     pygame.quit()
-                pygame.display.update()
+                self.clock.tick(30)
+
             if self.Start_Game == "snake":
-                s
-
+                self.snake_pos[1] += self.snake_vel[1]
+                self.snake_pos[0] += self.snake_vel[0]
+                result = Snake_Process.Snake(self).Snake_main(self)
+                self.snake_pos = result[0]
+                self.snake_body = result[1]
+                self.snake_score = result[2]
+                self.food_pos = result[3]
+                self.food_spawn = result[4]
+                self.clock.tick(10)
             pygame.display.flip()
-
-
