@@ -8,7 +8,7 @@ import Paddles
 import time
 import random
 import Snake_Process
-
+import Controller
 
 class Game:
     def __init__(self, info):
@@ -47,7 +47,9 @@ class Game:
     @property
     def event_process(self):
         while not self.crashed:
-            for event in pygame.event.get():
+            control_result = Controller.Control.controller(self)
+            self.i, self.Start_Menu, self.Start_Modes, self.val_y, self.vector_y, self.snake_vel, self.selected, self.val_y2, self.snake_vel = control_result
+            """for event in pygame.event.get():
                 if self.Start_Game == 'menu':
                     if event.type == pygame.QUIT:
                         pygame.quit()
@@ -99,8 +101,10 @@ class Game:
                             self.snake_vel[0] = -10
                         elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                             self.snake_vel[1] = 0
-                            self.snake_vel[0] = 10
+                            self.snake_vel[0] = 10"""
 
+
+            self.Start_Game = Menu.Menu(self).draw(self)
             if self.Start_Game == "pong":
                 self.right += self.val_y
                 self.left += self.val_y2

@@ -1,10 +1,13 @@
 import pygame
+import pygame.math as Mathematics
 
 
 class Control():
     def __init__(self):
-        pass
-    def controller(self):
+        self.height = 600
+        self.width = 1200
+
+    def controller(self, info):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -12,20 +15,37 @@ class Control():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    pass
+                    if info.i > 0:
+                        info.i -= 1
+                        info.Start_Menu = info.Start_Modes[info.i]
+                    info.val_y = Mathematics.Vector2(0, info.vector_y)
+                    info.snake_vel[0] = 0
+                    info.snake_vel[1] = -10
                 elif event.key == pygame.K_DOWN:
-                    pass
+                    if info.i < 2:
+                        info.i += 1
+                        info.Start_Menu = info.Start_Modes[info.i]
+
+                    info.val_y = Mathematics.Vector2(0, -info.vector_y)
+                    info.snake_vel[0] = 0
+                    info.snake_vel[1] = 10
                 elif event.key == pygame.K_RETURN:
-                    pass
+                    if info.Start_Menu == info.Start_Modes[1] or info.Start_Menu == info.Start_Modes[0]:
+                        info.selected = True
+                    if info.Start_Menu == "quit":
+                        pygame.quit()
+                        quit()
                 elif event.key == pygame.K_w:
-                    pass
+                    info.val_y2 = Mathematics.Vector2(0, info.vector_y)
                 elif event.key == pygame.K_s:
-                    pass
-                elif event.key == pygame.K_ESCAPE:
-                    pass
+                    info.val_y2 = Mathematics.Vector2(0, -info.vector_y)
                 elif event.key == pygame.K_LEFT:
-                    pass
+                    info.snake_vel[1] = 0
+                    info.snake_vel[0] = -10
                 elif event.key == pygame.K_RIGHT:
-                    pass
+                    info.snake_vel[1] = 0
+                    info.snake_vel[0] = 10
             if event.type == pygame.KEYUP:
-                pass
+                info.val_y = Mathematics.Vector2(0, 0)
+                info.val_y2 = Mathematics.Vector2(0, 0)
+            return info.i, info.Start_Menu, info.Start_Modes, info.val_y, info.vector_y, info.snake_vel, info.selected, info.val_y2, info.snake_vel
