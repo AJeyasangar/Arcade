@@ -6,7 +6,7 @@ class Menu:
         self.screen = info.screen
         self.width = info.width
         self.height = info.height
-        self.font = "Airstream.ttf"
+        self.font = "arcade.ttf"
 
     def draw(self, info):
         title = "The Arcade"
@@ -43,8 +43,8 @@ class Menu:
 
         self.screen.blit(title, (self.width/2 - (title_rect[2]/2), 80))
         self.screen.blit(text_Pong, (self.width/2 - (Pong_rect[2]/2), 300))
-        self.screen.blit(text_Snake, (self.width / 2 - (Snake_rect[2] / 2), 360))
-        self.screen.blit(text_quit, (self.width/2 - (quit_rect[2]/2), 420))
+        self.screen.blit(text_Snake, (self.width / 2 - (Snake_rect[2] / 2), 400))
+        self.screen.blit(text_quit, (self.width/2 - (quit_rect[2]/2), 500))
         return info.Start_Game
 
 

@@ -2,12 +2,10 @@ import pygame
 import pygame.math as Mathematics
 
 
-class Control():
-    def __init__(self):
-        self.height = 600
-        self.width = 1200
+class Control:
 
-    def controller(self, info):
+
+    def controller(info):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

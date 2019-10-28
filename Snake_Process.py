@@ -34,9 +34,9 @@ class Snake:
             game_over(self.width, self.height)
         if info.snake_pos[1] < 0 or info.snake_pos[1] > self.height:
             game_over(self.width, self.height)
-        """for block in snake_body[1:]:
-            if snake_pos[0] == block[0] and snake_pos[1] == block[1]:
-                game_over()"""
+        """for block in info.snake_body[1:]:
+            if info.snake_pos[0] == block[0] and info.snake_pos[1] == block[1]:
+                game_over(self.width, self.height)"""
         Snake.show_score(self, 1, (255, 255, 255), self.font, 20, info.snake_score)
         return info.snake_pos, info.snake_body, info.snake_score, info.food_pos, info.food_spawn
 

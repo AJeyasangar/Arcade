@@ -6,7 +6,7 @@ class Screen:
         self.width = info.width
         self.score_left = info.score_left
         self.score_right = info.score_right
-        self.font = pygame.font.Font(None,  34)
+        self.font = pygame.font.Font("arcade.ttf",  34)
         self.screen = info.screen
 
     def score_board(self):

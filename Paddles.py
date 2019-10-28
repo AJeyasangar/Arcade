@@ -17,16 +17,21 @@ class Paddles:
         pygame.draw.rect(info.screen, (255, 255, 255), (info.left[0], info.left[1], 10, 100))
         self.angle = maths.Angle(self.ball_pos, self.ball_speed, self.speed_direction).calculate
         self.speed_val = info.speed_val
+        self.last_ball_pos = info.last_ball_pos
 
     def hit(self):
+        if self.last_ball_pos == 0 and self.ball_pos[0] >= self.width-12 and self.speed_val > 0:
+            print("jere")
+            self.angle = self.angle - 180
+
         if self.ball_pos[0] <= 12 and int(self.left[1]) <= self.ball_pos[1] <= (int(self.left[1] + 100)):
             self.ball_pos[0] = 12
             if self.ball_pos[1] == self.left[1]:
-                self.ball_speed = Mathematics.Vector2(self.speed_val).rotate(- self.angle)
+                self.ball_speed = Mathematics.Vector2(-self.speed_val).rotate(self.angle*2)
             elif self.ball_pos[1] >= self.left[1]:
-                self.ball_speed = Mathematics.Vector2(self.speed_val).rotate(-(self.angle * 2))
+                self.ball_speed = Mathematics.Vector2(-self.speed_val).rotate((self.angle*2))
             else:
-                self.ball_speed = Mathematics.Vector2(self.speed_val).rotate((self.angle * 2))
+                self.ball_speed = Mathematics.Vector2(-self.speed_val).rotate((self.angle * 2))
             if self.speed_val < 10:
                 self.speed_val += self.speed_increase
             self.speed_direction = True
@@ -39,7 +44,7 @@ class Paddles:
             else:
                 self.ball_speed = Mathematics.Vector2(self.speed_val).rotate(-(self.angle * 2))
             self.speed_direction = False
-            if self.speed_val < 10:
+            if self.speed_val < 8:
                 self.speed_val += self.speed_increase
         return self.ball_pos, self.ball_speed, self.speed_direction, self.speed_val
 
