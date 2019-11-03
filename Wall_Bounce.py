@@ -37,11 +37,13 @@ class BounceBoundaries:
             elif not info.speed_direction:
                 self.ball_speed = Mathematics.Vector2(self.speed_val).rotate(180)
             self.last_ball_pos = 0
+            info.last_bounce = self.ball_pos
         elif self.ball_pos[1] < 3.5:
             if info.speed_direction:
                 self.ball_speed = Mathematics.Vector2(self.speed_val).rotate(0)
             elif not info.speed_direction:
                 self.ball_speed = Mathematics.Vector2(self.speed_val).rotate(90)
-            self.last_ball_pos = 600
+            self.last_ball_pos = self.height
+            info.last_bounce = self.ball_pos
         return self.ball_pos, self.ball_speed, info.score_left, info.score_right, info.speed_direction, self.speed_val, \
-               self.last_ball_pos
+               self.last_ball_pos, info.last_bounce

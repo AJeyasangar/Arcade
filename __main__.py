@@ -1,7 +1,7 @@
-#This links all the programs together so the program can work
 import Game_Controls
 import pygame
 import os
+
 
 class Game:
     def __init__(self):
@@ -15,7 +15,6 @@ class Game:
         self.height = _H
 
     def __call__(self):
-        self.screen.fill((0, 0, 0))
         Game_Controls.Game(self).event_process
 
 
